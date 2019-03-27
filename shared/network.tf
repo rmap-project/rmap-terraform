@@ -21,7 +21,9 @@ resource "aws_internet_gateway" "default" {
 resource "aws_subnet" "shared1" {
     vpc_id = "${aws_vpc.default.id}"
     cidr_block = "10.0.0.0/24"
-    availability_zones = "us-east-1a"
+    availability_zone = "us-east-1a"
+    map_public_ip_on_launch = true
+    
     tags {
         Name = "rmap-shared-1"
         Environment = "shared"
@@ -32,7 +34,8 @@ resource "aws_subnet" "shared1" {
 resource "aws_subnet" "subnet2" {
     vpc_id = "${aws_vpc.default.id}"
     cidr_block = "10.0.1.0/24"
-    availability_zones = "us-east-1c"
+    availability_zone = "us-east-1c"
+    map_public_ip_on_launch = true
 
     tags {
         Name = "rmap-shared-2"
@@ -53,11 +56,30 @@ resource "aws_route_table" "nat" {
 resource "aws_route" "default" {
     destination_cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.default.id}"
-    route_table_id = "${aws_vpc.default.defatul_route_table_id}"
+    route_table_id = "${aws_vpc.default.default_route_table_id}"
 }
 
 resource "aws_route" "nat" {
     destination_cidr_block = "0.0.0.0/0"
     nat_gateway_id = "${aws_nat_gateway.nat.id}"
-    route_table_id = "${aws_route.nat.id}"
+    route_table_id = "${aws_route_table.nat.id}"
+}
+
+resource "aws_security_group" "allow_egress" {
+    name = "rmap_allow_outbound"
+    description = "Allow outbound traffic"
+    vpc_id = "${aws_vpc.default.id}"
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = -1
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags {
+        Name = "rmap_allow_outbound"
+        Project = "RMAP"
+        Environment = "shared"
+    }
 }

@@ -1,6 +1,6 @@
 provider "aws" {
     region = "us-east-1"
-    profile = "rmap-deploy"
+    profile = "jhuadmin"
 }
 
 terraform {
@@ -11,3 +11,5 @@ terraform {
         profile = "jhuadmin"
     }
 }
+
+data "aws_caller_identity" "current" {}
