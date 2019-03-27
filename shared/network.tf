@@ -6,7 +6,7 @@ resource "aws_vpc" "default" {
     tags {
         Name = "RMAP Infrastructure"
         Project = "RMAP"
-        Environment = "Shared"
+        Environment = "shared"
     }
 }
 
@@ -24,7 +24,7 @@ resource "aws_subnet" "shared1" {
     availability_zones = "us-east-1a"
     tags {
         Name = "rmap-shared-1"
-        Environment = "Shared"
+        Environment = "shared"
         Project = "RMAP"
     }
 }
@@ -39,4 +39,25 @@ resource "aws_subnet" "subnet2" {
         Environment = "shared"
         Project = "RMAP"
     }
+}
+
+resource "aws_route_table" "nat" {
+    vpc_id = "${aws_vpc.default.id}"
+    tags {
+        Name = "rmap-nat"
+        Project = "RMAP"
+        Environment = "shared"
+    }
+}
+
+resource "aws_route" "default" {
+    destination_cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.default.id}"
+    route_table_id = "${aws_vpc.default.defatul_route_table_id}"
+}
+
+resource "aws_route" "nat" {
+    destination_cidr_block = "0.0.0.0/0"
+    nat_gateway_id = "${aws_nat_gateway.nat.id}"
+    route_table_id = "${aws_route.nat.id}"
 }
