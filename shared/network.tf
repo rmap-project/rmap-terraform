@@ -31,7 +31,7 @@ resource "aws_subnet" "shared1" {
     }
 }
 
-resource "aws_subnet" "subnet2" {
+resource "aws_subnet" "shared2" {
     vpc_id = "${aws_vpc.default.id}"
     cidr_block = "10.0.1.0/24"
     availability_zone = "us-east-1c"
@@ -82,4 +82,26 @@ resource "aws_security_group" "allow_egress" {
         Project = "RMAP"
         Environment = "shared"
     }
+}
+
+resource "aws_route_table_association" "shared1" {
+    subnet_id = "${aws_subnet.shared1.id}"
+    route_table_id = "${aws_vpc.default.default_route_table_id}"
+}
+
+resource "aws_route_table_association" "shared2" {
+    subnet_id = "${aws_subnet.shared2.id}"
+    route_table_id = "${aws_vpc.default.default_route_table_id}"
+}
+
+output "vpc_id" {
+    value = "${aws_vpc.default.id}"
+}
+
+output "nat_route_table" {
+    value = "${aws_route_table.nat.id}"
+}
+
+output "allow_egress_security_group" {
+    value = "${aws_security_group.allow_egress.id}"
 }
