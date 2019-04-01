@@ -1,0 +1,246 @@
+{
+    "version": 3,
+    "terraform_version": "0.11.13",
+    "serial": 23,
+    "lineage": "6d053a84-ca0a-7221-bfae-84c69a0ee9f6",
+    "modules": [
+        {
+            "path": [
+                "root"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_db_subnet_group.default": {
+                    "type": "aws_db_subnet_group",
+                    "depends_on": [
+                        "aws_subnet.subnet1",
+                        "aws_subnet.subnet2"
+                    ],
+                    "primary": {
+                        "id": "rmap-ops",
+                        "attributes": {
+                            "arn": "arn:aws:rds:us-east-1:005956675899:subgrp:rmap-ops",
+                            "description": "RMAP ops database subnet group",
+                            "id": "rmap-ops",
+                            "name": "rmap-ops",
+                            "subnet_ids.#": "2",
+                            "subnet_ids.1526793893": "subnet-08213dbbbf1a5830c",
+                            "subnet_ids.154140747": "subnet-077e5064c6db3a978",
+                            "tags.%": "3",
+                            "tags.Environemnt": "ops",
+                            "tags.Name": "rmap-ops db",
+                            "tags.Project": "RMAP"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_route_table_association.subnet1": {
+                    "type": "aws_route_table_association",
+                    "depends_on": [
+                        "aws_subnet.subnet1",
+                        "data.terraform_remote_state.shared"
+                    ],
+                    "primary": {
+                        "id": "rtbassoc-02ae00438d5efb517",
+                        "attributes": {
+                            "id": "rtbassoc-02ae00438d5efb517",
+                            "route_table_id": "rtb-03a490d99e37c8996",
+                            "subnet_id": "subnet-077e5064c6db3a978"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_route_table_association.subnet2": {
+                    "type": "aws_route_table_association",
+                    "depends_on": [
+                        "aws_subnet.subnet2",
+                        "data.terraform_remote_state.shared"
+                    ],
+                    "primary": {
+                        "id": "rtbassoc-02d5d0b0cf310a957",
+                        "attributes": {
+                            "id": "rtbassoc-02d5d0b0cf310a957",
+                            "route_table_id": "rtb-03a490d99e37c8996",
+                            "subnet_id": "subnet-08213dbbbf1a5830c"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_security_group.mariadb": {
+                    "type": "aws_security_group",
+                    "depends_on": [
+                        "data.terraform_remote_state.shared"
+                    ],
+                    "primary": {
+                        "id": "sg-04ce48358262b182e",
+                        "attributes": {
+                            "arn": "arn:aws:ec2:us-east-1:005956675899:security-group/sg-04ce48358262b182e",
+                            "description": "MariaDB SecurityGroup for rmap-ops",
+                            "egress.#": "0",
+                            "id": "sg-04ce48358262b182e",
+                            "ingress.#": "1",
+                            "ingress.3370134516.cidr_blocks.#": "0",
+                            "ingress.3370134516.description": "",
+                            "ingress.3370134516.from_port": "3306",
+                            "ingress.3370134516.ipv6_cidr_blocks.#": "0",
+                            "ingress.3370134516.prefix_list_ids.#": "0",
+                            "ingress.3370134516.protocol": "tcp",
+                            "ingress.3370134516.security_groups.#": "1",
+                            "ingress.3370134516.security_groups.397085316": "sg-08d1b3f2f2de198b2",
+                            "ingress.3370134516.self": "false",
+                            "ingress.3370134516.to_port": "3306",
+                            "name": "rmap_ops_mariadb",
+                            "owner_id": "005956675899",
+                            "revoke_rules_on_delete": "false",
+                            "tags.%": "0",
+                            "vpc_id": "vpc-0ab85616dd2171853"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 600000000000,
+                                "delete": 600000000000
+                            },
+                            "schema_version": "1"
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_subnet.subnet1": {
+                    "type": "aws_subnet",
+                    "depends_on": [
+                        "data.terraform_remote_state.shared"
+                    ],
+                    "primary": {
+                        "id": "subnet-077e5064c6db3a978",
+                        "attributes": {
+                            "arn": "arn:aws:ec2:us-east-1:005956675899:subnet/subnet-077e5064c6db3a978",
+                            "assign_ipv6_address_on_creation": "false",
+                            "availability_zone": "us-east-1a",
+                            "availability_zone_id": "use1-az1",
+                            "cidr_block": "10.0.10.0/24",
+                            "id": "subnet-077e5064c6db3a978",
+                            "ipv6_cidr_block": "",
+                            "ipv6_cidr_block_association_id": "",
+                            "map_public_ip_on_launch": "false",
+                            "owner_id": "005956675899",
+                            "tags.%": "3",
+                            "tags.Environment": "ops",
+                            "tags.Name": "rmap-ops-1",
+                            "tags.Project": "RMAP",
+                            "vpc_id": "vpc-0ab85616dd2171853"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 600000000000,
+                                "delete": 600000000000
+                            },
+                            "schema_version": "1"
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_subnet.subnet2": {
+                    "type": "aws_subnet",
+                    "depends_on": [
+                        "data.terraform_remote_state.shared"
+                    ],
+                    "primary": {
+                        "id": "subnet-08213dbbbf1a5830c",
+                        "attributes": {
+                            "arn": "arn:aws:ec2:us-east-1:005956675899:subnet/subnet-08213dbbbf1a5830c",
+                            "assign_ipv6_address_on_creation": "false",
+                            "availability_zone": "us-east-1c",
+                            "availability_zone_id": "use1-az4",
+                            "cidr_block": "10.0.11.0/24",
+                            "id": "subnet-08213dbbbf1a5830c",
+                            "ipv6_cidr_block": "",
+                            "ipv6_cidr_block_association_id": "",
+                            "map_public_ip_on_launch": "false",
+                            "owner_id": "005956675899",
+                            "tags.%": "3",
+                            "tags.Environment": "ops",
+                            "tags.Name": "rmap-ops-2",
+                            "tags.Project": "RMAP",
+                            "vpc_id": "vpc-0ab85616dd2171853"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 600000000000,
+                                "delete": 600000000000
+                            },
+                            "schema_version": "1"
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "data.terraform_remote_state.shared": {
+                    "type": "terraform_remote_state",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "2019-03-28 19:58:31.078117 +0000 UTC",
+                        "attributes": {
+                            "backend": "s3",
+                            "config.#": "1",
+                            "config.407102344.bucket": "msel-ops-terraform-statefiles",
+                            "config.407102344.key": "applications/rmap-shared",
+                            "config.407102344.profile": "jhuadmin",
+                            "config.407102344.region": "us-east-1",
+                            "environment": "default",
+                            "id": "2019-03-28 19:58:31.078117 +0000 UTC",
+                            "nat_route_table": "rtb-03a490d99e37c8996",
+                            "ops_security_group": "sg-08d1b3f2f2de198b2",
+                            "vpc_id": "vpc-0ab85616dd2171853",
+                            "workspace": "default"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.terraform"
+                },
+                "random_string.mariadb_password": {
+                    "type": "random_string",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "none",
+                        "attributes": {
+                            "id": "none",
+                            "length": "16",
+                            "lower": "true",
+                            "min_lower": "0",
+                            "min_numeric": "0",
+                            "min_special": "0",
+                            "min_upper": "0",
+                            "number": "true",
+                            "result": "p928hKstGdrEokbk",
+                            "special": "false",
+                            "upper": "true"
+                        },
+                        "meta": {
+                            "schema_version": "1"
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.random"
+                }
+            },
+            "depends_on": []
+        }
+    ]
+}
