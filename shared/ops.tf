@@ -4,7 +4,7 @@ data "aws_ami" "amz_linux" {
 
     filter {
         name = "name"
-        values = ["amzn-ami-hvm*-x86_64-gp2"]
+        values = ["amzn2-ami-hvm*-x86_64-gp2"]
     }
 
     filter {
@@ -31,6 +31,25 @@ resource "aws_security_group" "ops" {
         Project = "RMAP"
         Environment = "shared"
     }    
+}
+
+resource "aws_security_group" "allow_ops" {
+    name = "rmap_allow_ops_in"
+    description = "Allow full access from Ops server"
+    vpc_id = "${aws_vpc.default.id}"
+
+    ingress {
+        from_port = 0
+        to_port = 0
+        protocol = -1
+        security_groups = [ "${aws_security_group.ops.id}"]
+    }
+
+    tags {
+        Name = "rmap_allow_ops_in"
+        Project = "RMAP"
+        Environment = "shared"
+    }
 }
 
 resource "aws_iam_role" "ops_server" {
@@ -99,7 +118,7 @@ resource "aws_instance" "ops" {
 
     provisioner "remote-exec" {
         inline = [
-            "sudo yum -y install jq",
+            "sudo yum -y install jq mysql",
             "aws ssm get-parameter --with-decryption --name /rmap/shared/github_key --region us-east-1 | jq -re '.Parameter.Value' > ~/.ssh/github.pem",
             "chmod 600 .ssh/*",
             "touch ~/.configured"
@@ -120,4 +139,16 @@ resource "aws_route53_record" "ops" {
     ttl = "10"
 
     records = [ "${aws_instance.ops.public_dns}" ]
+}
+
+output "ops_security_group" {
+    value = "${aws_security_group.ops.id}"
+}
+
+output "allow_ops_security_group" {
+    value = "${aws_security_group.allow_ops.id}"
+}
+
+output "amz_ami_id" {
+    value = "${data.aws_ami.amz_linux.id}"
 }
