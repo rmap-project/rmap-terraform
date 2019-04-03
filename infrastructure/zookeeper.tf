@@ -13,15 +13,15 @@ resource "aws_instance" "zk" {
         Environment = "${terraform.workspace}"
     }
 
+    ebs_block_device {
+        device_name = "/dev/sdg"
+        volume_size = 20
+        volume_type = "gp2"
+        delete_on_termination = false
+    }
     provisioner "remote-exec" {
         inline = [
             "sudo yum install -y java-1.8.0-openjdk-headless curl",
-            "curl -sSL -o /tmp/zookeeper.tar.gz ${var.zookeeper_url}",
-            "sudo mkdir /opt/zookeeper",
-            "sudo tar --strip-components=1 -zxvf /tmp/zookeeper.tar.gz -C /opt/zookeeper",
-            "curl -sSL -o /tmp/kafka.tgz ${var.kafka_url}",
-            "sudo mkdir /opt/kafka",
-            "sudo tar --strip-components=1 -zxvf /tmp/kafka.tgz -C /opt/kafka",
         ]
 
         connection {

@@ -111,7 +111,7 @@ resource "aws_instance" "ops" {
     iam_instance_profile = "${aws_iam_instance_profile.ops.id}"
 
     tags {
-        Name = "rmap-ops"
+        Name = "rmap-ops-server"
         Project = "RMAP"
         Environment = "shared"
     }
