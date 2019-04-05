@@ -105,3 +105,11 @@ output "nat_route_table" {
 output "allow_egress_security_group" {
     value = "${aws_security_group.allow_egress.id}"
 }
+
+output "subnet_shared1_id" {
+    value = "${aws_subnet.shared1.id}"
+}
+
+output "subnet_shared2_id" {
+    value = "${aws_subnet.shared2.id}"
+}

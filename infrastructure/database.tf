@@ -23,7 +23,7 @@ resource "aws_security_group" "mariadb" {
         to_port = 3306
         from_port = 3306
         protocol = "tcp"
-        security_groups = [ "${data.terraform_remote_state.shared.ops_security_group}"]
+        security_groups = [ "${data.terraform_remote_state.shared.ops_security_group}",  "${data.terraform_remote_state.shared.allow_ops_security_group}"]
     }
 }
 
@@ -107,11 +107,11 @@ resource "aws_db_instance" "appserver" {
 
 resource "aws_route53_record" "appserver_db" {
     zone_id = "${data.aws_route53_zone.orgzone.id}"
-    name = "mariadb.${terraform.workspace}"
+    name = "mariadb.${terraform.workspace}.rmap-hub.org"
     type = "CNAME"
     ttl = "10"
 
-    records = [ "${aws_db_instance.appserver.endpoint}"]
+    records = [ "${aws_db_instance.appserver.address}"]
 }
 
 output "database_user" {

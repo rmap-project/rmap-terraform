@@ -1,10 +1,36 @@
+resource "aws_security_group" "zookeeper" {
+    name = "rmap_${terraform.workspace}_zookeeper"
+    vpc_id = "${data.terraform_remote_state.shared.vpc_id}"
+
+    ingress {
+        from_port = 2181
+        to_port = 2181
+        protocol = "tcp"
+
+        security_groups = [ "${aws_security_group.appserver80.id}"]
+    }
+
+    ingress {
+        from_port = 9092
+        to_port = 9092
+        protocol = "tcp"
+
+        security_groups = [ "${aws_security_group.appserver80.id}"]
+    }
+
+    tags {
+        Name = "rmap_${terraform.workspace}_zookeeper"
+        Project = "RMAP"
+        Environment = "${terraform.workspace}"
+    }
+}
 resource "aws_instance" "zk" {
     count = 1
     ami = "${data.terraform_remote_state.shared.amz_ami_id}"
     instance_type = "t2.small"
     subnet_id = "${aws_subnet.subnet2.id}"
 
-    vpc_security_group_ids = ["${data.terraform_remote_state.shared.allow_ops_security_group}", "${data.terraform_remote_state.shared.allow_egress_security_group}"]
+    vpc_security_group_ids = ["${aws_security_group.zookeeper.id}", "${data.terraform_remote_state.shared.allow_ops_security_group}", "${data.terraform_remote_state.shared.allow_egress_security_group}"]
     key_name = "operations"
 
     tags {
